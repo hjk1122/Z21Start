@@ -38,41 +38,46 @@
             // 
             // txtSendMsg
             // 
-            this.txtSendMsg.Location = new System.Drawing.Point(127, 36);
+            this.txtSendMsg.Location = new System.Drawing.Point(95, 29);
+            this.txtSendMsg.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.txtSendMsg.Name = "txtSendMsg";
-            this.txtSendMsg.Size = new System.Drawing.Size(158, 25);
+            this.txtSendMsg.Size = new System.Drawing.Size(120, 21);
             this.txtSendMsg.TabIndex = 0;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(46, 39);
+            this.label1.Location = new System.Drawing.Point(34, 31);
+            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(82, 15);
+            this.label1.Size = new System.Drawing.Size(65, 12);
             this.label1.TabIndex = 1;
             this.label1.Text = "发送信息：";
             // 
             // txtRecvMsg
             // 
-            this.txtRecvMsg.Location = new System.Drawing.Point(127, 164);
+            this.txtRecvMsg.Location = new System.Drawing.Point(95, 131);
+            this.txtRecvMsg.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.txtRecvMsg.Name = "txtRecvMsg";
-            this.txtRecvMsg.Size = new System.Drawing.Size(157, 25);
+            this.txtRecvMsg.Size = new System.Drawing.Size(119, 21);
             this.txtRecvMsg.TabIndex = 2;
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(39, 167);
+            this.label2.Location = new System.Drawing.Point(29, 134);
+            this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(82, 15);
+            this.label2.Size = new System.Drawing.Size(65, 12);
             this.label2.TabIndex = 3;
             this.label2.Text = "接收信息：";
             // 
             // btnRecv
             // 
-            this.btnRecv.Location = new System.Drawing.Point(347, 164);
+            this.btnRecv.Location = new System.Drawing.Point(260, 127);
+            this.btnRecv.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btnRecv.Name = "btnRecv";
-            this.btnRecv.Size = new System.Drawing.Size(75, 23);
+            this.btnRecv.Size = new System.Drawing.Size(70, 31);
             this.btnRecv.TabIndex = 4;
             this.btnRecv.Text = "接收";
             this.btnRecv.UseVisualStyleBackColor = true;
@@ -80,9 +85,10 @@
             // 
             // btnSend
             // 
-            this.btnSend.Location = new System.Drawing.Point(347, 39);
+            this.btnSend.Location = new System.Drawing.Point(260, 27);
+            this.btnSend.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btnSend.Name = "btnSend";
-            this.btnSend.Size = new System.Drawing.Size(75, 23);
+            this.btnSend.Size = new System.Drawing.Size(70, 29);
             this.btnSend.TabIndex = 5;
             this.btnSend.Text = "发送";
             this.btnSend.UseVisualStyleBackColor = true;
@@ -90,17 +96,20 @@
             // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(571, 255);
+            this.ClientSize = new System.Drawing.Size(428, 204);
             this.Controls.Add(this.btnSend);
             this.Controls.Add(this.btnRecv);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.txtRecvMsg);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.txtSendMsg);
+            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.Name = "Form1";
             this.Text = "Form1";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form1_FormClosed);
             this.ResumeLayout(false);
             this.PerformLayout();
 

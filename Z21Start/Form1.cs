@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -11,6 +12,7 @@ using System.Windows.Forms;
 //本段代码中需要新增加的命名空间
 using System.Net.Sockets;
 using System.Net;
+using System.Runtime.Remoting.Channels;
 using System.Threading;
 
 namespace Z21Start
@@ -20,6 +22,12 @@ namespace Z21Start
         public Form1()
         {
             InitializeComponent();
+        }
+
+        struct sendStr
+        {
+            public string str1;
+            public string str2;
         }
 
         /// <summary>
@@ -39,19 +47,37 @@ namespace Z21Start
         /// <param name="e"></param>
         private void btnSend_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(txtSendMsg.Text))
-            {
-                MessageBox.Show("请先输入待发送内容");
-                return;
-            }
+            //if (string.IsNullOrWhiteSpace(txtSendMsg.Text))
+            //{
+            //    MessageBox.Show("请先输入待发送内容");
+            //    return;
+            //}
 
             // 匿名发送
             //udpcSend = new UdpClient(0);             // 自动分配本地IPv4地址
             // 实名发送
-            IPEndPoint localIpep = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 12345); // 本机IP，指定的端口号
-            udpcSend = new UdpClient(localIpep);
-            Thread thrSend = new Thread(SendMessage);
-            thrSend.Start(txtSendMsg.Text);
+            try
+            {
+                IPEndPoint localIpep = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 6267); // 本机IP，指定的端口号
+                udpcSend = new UdpClient(localIpep);
+                string str1 = "0900400053006b88b0";
+                string str2 = "0900400053006b80b8";
+                //ArrayList str=new ArrayList();
+                sendStr sendStr = new sendStr();
+                sendStr.str1 = str1;
+                sendStr.str2 = str2;
+                string[] str = new string[2] {str1, str2};
+                Thread thrSend = new Thread(SendMessage1);
+                //thrSend.Start(txtSendMsg.Text);
+                thrSend.Start(sendStr);
+                //Thread thread1=new Thread(SendMessage);
+                //thrSend.Start(str2);
+                MessageBox.Show("发送成功", "信息");
+            }
+            catch (Exception e1)
+            {
+                MessageBox.Show(this, e1.Message, "错误");
+            }
         }
 
         /// <summary>
@@ -62,10 +88,30 @@ namespace Z21Start
         {
             string message = (string) obj;
             byte[] sendbytes = Encoding.Unicode.GetBytes(message);
-            IPEndPoint remoteIpep = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 8848); // 发送到的IP地址和端口号
+            IPEndPoint remoteIpep = new IPEndPoint(IPAddress.Parse("192.168.0.111"), 21105); // 发送到的IP地址和端口号
             udpcSend.Send(sendbytes, sendbytes.Length, remoteIpep);
             udpcSend.Close();
             //ResetTextBox(txtSendMsg);
+        }
+
+        private void SendMessage1(object obj)
+        {
+            try
+            {
+                sendStr sendStr1 = (sendStr) obj;
+
+                byte[] sendbytes = Encoding.Unicode.GetBytes(sendStr1.str1);
+                IPEndPoint remoteIpep = new IPEndPoint(IPAddress.Parse("192.168.18.4"), 21105); // 发送到的IP地址和端口号
+                udpcSend.Send(sendbytes, sendbytes.Length, remoteIpep);
+                sendbytes = Encoding.Unicode.GetBytes(sendStr1.str2);
+                remoteIpep = new IPEndPoint(IPAddress.Parse("192.168.18.4"), 21105); // 发送到的IP地址和端口号
+                int result = udpcSend.Send(sendbytes, sendbytes.Length, remoteIpep);
+                udpcSend.Close();
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
         }
 
         /// <summary>
@@ -87,7 +133,7 @@ namespace Z21Start
         {
             if (!IsUdpcRecvStart) // 未监听的情况，开始监听
             {
-                IPEndPoint localIpep = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 8848); // 本机IP和监听端口号
+                IPEndPoint localIpep = new IPEndPoint(IPAddress.Parse("192.168.18.4"), 21105); // 本机IP和监听端口号
                 udpcRecv = new UdpClient(localIpep);
                 thrRecv = new Thread(ReceiveMessage);
                 thrRecv.Start();
@@ -166,6 +212,10 @@ namespace Z21Start
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
             Environment.Exit(0);
+        }
+
+        private void Form1_FormClosed(object sender, FormClosedEventArgs e)
+        {
         }
     }
 }
