@@ -12,6 +12,8 @@ using System.Windows.Forms;
 using System.Net.Sockets;
 using System.Net;
 using System.Threading;
+using Z21Start.subForm;
+using Z21Start.tools;
 
 namespace Z21Start
 {
@@ -21,10 +23,19 @@ namespace Z21Start
         private int localPort = 0;
         private string remoteIP = "";
         private int remotePort = 0;
-
+        private  string strHex1 = "";
+        public  string StrHex
+        {
+            get { return strHex1; }
+            set { strHex1 = value; }
+        }
         public Form2()
         {
             InitializeComponent();
+            this.txtLocalIP.Text = "192.168.0.100";
+            this.txtLocalPort.Text = "200";
+            this.txtRemoteIP.Text = "192.168.0.111";
+            this.txtRemotePort.Text = "21105";
         }
 
         /// <summary>
@@ -81,8 +92,11 @@ namespace Z21Start
             {
                 remoteIP = this.txtRemoteIP.Text.Trim();
                 remotePort = int.Parse(this.txtRemotePort.Text);
+                //转换为16进制
                 string message = (string) obj;
-                byte[] sendbytes = Encoding.Unicode.GetBytes(message);
+                //byte[] sendbytes = Encoding.UTF8.GetBytes(message);
+                //16进制字符串转换为8位字节数组
+                byte[] sendbytes = Tool.strToHexByte(message);
                 //IPEndPoint remoteIpep = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 8848); // 发送到的IP地址和端口号
                 IPEndPoint remoteIpep = new IPEndPoint(IPAddress.Parse(remoteIP), remotePort); // 发送到的IP地址和端口号
                 udpcSend.Send(sendbytes, sendbytes.Length, remoteIpep);
@@ -210,6 +224,12 @@ namespace Z21Start
         private void Form2_FormClosing(object sender, FormClosingEventArgs e)
         {
             Environment.Exit(0);
+        }
+
+        private void btnSetXHD_Click(object sender, EventArgs e)
+        {
+            FrmSetXHD frmSetXhd=new FrmSetXHD();
+            frmSetXhd.Show();
         }
     }
 }

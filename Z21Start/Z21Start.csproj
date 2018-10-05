@@ -74,6 +74,14 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="subForm\FrmSetXHD.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="subForm\FrmSetXHD.Designer.cs">
+      <DependentUpon>FrmSetXHD.cs</DependentUpon>
+    </Compile>
+    <Compile Include="sysInfo\xhdData.cs" />
+    <Compile Include="tools\Tool.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
@@ -89,6 +97,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="subForm\FrmSetXHD.resx">
+      <DependentUpon>FrmSetXHD.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

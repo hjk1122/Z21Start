@@ -35,15 +35,16 @@
             this.txtSendMsg = new System.Windows.Forms.RichTextBox();
             this.txtRecvMsg = new System.Windows.Forms.RichTextBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.label3 = new System.Windows.Forms.Label();
-            this.txtLocalIP = new System.Windows.Forms.TextBox();
             this.txtLocalPort = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
+            this.txtLocalIP = new System.Windows.Forms.TextBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.txtRemotePort = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
             this.txtRemoteIP = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
+            this.btnSetXHD = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.SuspendLayout();
@@ -83,7 +84,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(14, 164);
+            this.label1.Location = new System.Drawing.Point(21, 190);
             this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(65, 12);
@@ -92,9 +93,9 @@
             // 
             // txtSendMsg
             // 
-            this.txtSendMsg.Location = new System.Drawing.Point(16, 187);
+            this.txtSendMsg.Location = new System.Drawing.Point(16, 205);
             this.txtSendMsg.Name = "txtSendMsg";
-            this.txtSendMsg.Size = new System.Drawing.Size(331, 239);
+            this.txtSendMsg.Size = new System.Drawing.Size(331, 221);
             this.txtSendMsg.TabIndex = 12;
             this.txtSendMsg.Text = "";
             // 
@@ -108,6 +109,7 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.btnSetXHD);
             this.groupBox1.Controls.Add(this.txtLocalPort);
             this.groupBox1.Controls.Add(this.label4);
             this.groupBox1.Controls.Add(this.txtLocalIP);
@@ -121,40 +123,6 @@
             this.groupBox1.TabIndex = 15;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "发送端";
-            // 
-            // groupBox2
-            // 
-            this.groupBox2.Controls.Add(this.txtRemotePort);
-            this.groupBox2.Controls.Add(this.label5);
-            this.groupBox2.Controls.Add(this.txtRemoteIP);
-            this.groupBox2.Controls.Add(this.label6);
-            this.groupBox2.Controls.Add(this.txtRecvMsg);
-            this.groupBox2.Controls.Add(this.label2);
-            this.groupBox2.Controls.Add(this.btnRecv);
-            this.groupBox2.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.groupBox2.Location = new System.Drawing.Point(435, 12);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(379, 462);
-            this.groupBox2.TabIndex = 16;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "接收端";
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(21, 33);
-            this.label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(71, 12);
-            this.label3.TabIndex = 13;
-            this.label3.Text = "本机IP地址:";
-            // 
-            // txtLocalIP
-            // 
-            this.txtLocalIP.Location = new System.Drawing.Point(91, 30);
-            this.txtLocalIP.Name = "txtLocalIP";
-            this.txtLocalIP.Size = new System.Drawing.Size(256, 21);
-            this.txtLocalIP.TabIndex = 14;
             // 
             // txtLocalPort
             // 
@@ -173,6 +141,40 @@
             this.label4.Size = new System.Drawing.Size(47, 12);
             this.label4.TabIndex = 15;
             this.label4.Text = "端口号:";
+            // 
+            // txtLocalIP
+            // 
+            this.txtLocalIP.Location = new System.Drawing.Point(91, 30);
+            this.txtLocalIP.Name = "txtLocalIP";
+            this.txtLocalIP.Size = new System.Drawing.Size(256, 21);
+            this.txtLocalIP.TabIndex = 14;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(21, 33);
+            this.label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(71, 12);
+            this.label3.TabIndex = 13;
+            this.label3.Text = "本机IP地址:";
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.txtRemotePort);
+            this.groupBox2.Controls.Add(this.label5);
+            this.groupBox2.Controls.Add(this.txtRemoteIP);
+            this.groupBox2.Controls.Add(this.label6);
+            this.groupBox2.Controls.Add(this.txtRecvMsg);
+            this.groupBox2.Controls.Add(this.label2);
+            this.groupBox2.Controls.Add(this.btnRecv);
+            this.groupBox2.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.groupBox2.Location = new System.Drawing.Point(435, 12);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(379, 462);
+            this.groupBox2.TabIndex = 16;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "接收端";
             // 
             // txtRemotePort
             // 
@@ -208,6 +210,16 @@
             this.label6.Size = new System.Drawing.Size(71, 12);
             this.label6.TabIndex = 17;
             this.label6.Text = "远端IP地址:";
+            // 
+            // btnSetXHD
+            // 
+            this.btnSetXHD.Location = new System.Drawing.Point(23, 124);
+            this.btnSetXHD.Name = "btnSetXHD";
+            this.btnSetXHD.Size = new System.Drawing.Size(75, 23);
+            this.btnSetXHD.TabIndex = 17;
+            this.btnSetXHD.Text = "设置信号灯";
+            this.btnSetXHD.UseVisualStyleBackColor = true;
+            this.btnSetXHD.Click += new System.EventHandler(this.btnSetXHD_Click);
             // 
             // Form2
             // 
@@ -245,5 +257,6 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.TextBox txtRemoteIP;
         private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Button btnSetXHD;
     }
 }
