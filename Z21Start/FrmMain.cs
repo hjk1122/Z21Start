@@ -25,7 +25,7 @@ namespace Z21Start
         private string remoteIP = "";
         private int remotePort = 0;
         private  string strHex1 = "";
-        private Thread thrSend = null;
+        //private Thread thrSend = null;
         public string StrHex
         {
             get { return strHex1; }
@@ -52,65 +52,36 @@ namespace Z21Start
 
 
         /// <summary>
-        /// 按钮：发送数据
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void btnSend_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                localIP = this.txtLocalIP.Text.Trim();
-                localPort = int.Parse(this.txtLocalPort.Text);
-
-                if (string.IsNullOrWhiteSpace(txtSendMsg.Text))
-                {
-                    MessageBox.Show("请先输入待发送内容");
-                    return;
-                }
-
-                // 匿名发送
-                //udpcSend = new UdpClient(0);             // 自动分配本地IPv4地址
-                // 实名发送
-                //IPEndPoint localIpep = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 12345); // 本机IP，指定的端口号
-                IPEndPoint localIpep = new IPEndPoint(IPAddress.Parse(localIP), localPort); // 本机IP，指定的端口号
-                udpcSend = new UdpClient(localIpep);
-                Thread thrSend = new Thread(SendMessage);
-                thrSend.Start(txtSendMsg.Text);
-            }
-            catch (Exception e1)
-            {
-                MessageBox.Show(e1.Message, "错误");
-            }
-        }
-        /// <summary>
         /// 将数据发送到z21系统
         /// </summary>
         private void Send(string str)
         {
-            //Thread thrSend = null;
+            Thread thrSend = null;
             try
             {
                 //判断线程是否正常运行
-                if (thrSend.IsAlive == false)
-                {
-                    thrSend = new Thread(SendMessage);
-                }
+                //if (thrSend.IsAlive == false)
+                //{
+                //    thrSend = new Thread(SendMessage);
+                //}
+                thrSend = new Thread(SendMessage);
                 remoteIP = this.txtRemoteIP.Text.Trim();
                 remotePort = int.Parse(this.txtRemotePort.Text);
-                IPEndPoint localIpep = new IPEndPoint(IPAddress.Parse(remoteIP), remotePort); // 本机IP，指定的端口号
+                IPEndPoint localIpep = new IPEndPoint(IPAddress.Parse(localIP), localPort+1); // 本机IP，指定的端口号
                 udpcSend = new UdpClient(localIpep);
-                
+                //this.SendMessage(str);
                 thrSend.Start(str);
             }
             catch (Exception e1)
             {
-                MessageBox.Show(e1.Message, "错误");
+                //MessageBox.Show(e1.Message, "错误");
+                //ShowMessage(this.txtSendMsg, string.Format("错误：{0}", e1.Message));
+                throw e1;
             }
-            finally
-            {
-                thrSend.Abort();
-            }
+            //finally
+            //{
+            //    //thrSend.Abort();
+            //}
         }
 
         /// <summary>
@@ -121,8 +92,6 @@ namespace Z21Start
         {
             try
             {
-                remoteIP = this.txtRemoteIP.Text.Trim();
-                remotePort = int.Parse(this.txtRemotePort.Text);
                 //转换为16进制
                 string message = (string) obj;
                 //byte[] sendbytes = Encoding.UTF8.GetBytes(message);
@@ -138,6 +107,7 @@ namespace Z21Start
             }
             catch (Exception e1)
             {
+                ShowMessage(this.txtSendMsg, string.Format("错误：{0}", e1.Message));
                 throw e1;
             }
         }
@@ -163,6 +133,9 @@ namespace Z21Start
             {
                 localIP = this.txtLocalIP.Text.Trim();
                 localPort = int.Parse(this.txtLocalPort.Text);
+                remoteIP = this.txtRemoteIP.Text.Trim();
+                remotePort = int.Parse(this.txtRemotePort.Text);
+
                 if (!IsUdpcRecvStart) // 未监听的情况，开始监听
                 {
                     //IPEndPoint localIpep = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 8848); // 本机IP和监听端口号
@@ -180,6 +153,7 @@ namespace Z21Start
                     IsUdpcRecvStart = false;
                     ShowMessage(txtRecvMsg, "UDP监听器已成功关闭");
                 }
+
             }
             catch (Exception e1)
             {
@@ -202,13 +176,14 @@ namespace Z21Start
                     try
                     {
                         byte[] bytRecv = udpcRecv.Receive(ref remoteIpep);
-                        string message = Encoding.Unicode.GetString(bytRecv, 0, bytRecv.Length);
+                        //string message = Encoding.Unicode.GetString(bytRecv, 0, bytRecv.Length);
+                        string message = Tool.byteToHexStr(bytRecv);
                         ShowMessage(txtRecvMsg, string.Format("{0}[{1}]", remoteIpep, message));
                         this.Send(message);
                     }
                     catch (Exception ex)
                     {
-                        ShowMessage(txtRecvMsg, ex.Message);
+                        ShowMessage(txtRecvMsg, "错误:"+ex.Message);
                         break;
                     }
                 }

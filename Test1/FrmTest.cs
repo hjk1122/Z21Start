@@ -105,7 +105,7 @@ namespace Test1
             }
             catch (Exception e1)
             {
-                throw e1;
+                MessageBox.Show(e1.Message, "错误");
             }
         }
 
@@ -119,11 +119,6 @@ namespace Test1
         /// </summary>
         Thread thrRecv;
 
-        /// <summary>
-        /// 按钮：接收数据开关
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
 
 
         // 向RichTextBox中添加文本

@@ -80,13 +80,26 @@ namespace Test1.tools
         /// <returns></returns>
         public static byte[] strToHexByte(string hexString)
         {
-            hexString = hexString.Replace(" ", "");
-            if ((hexString.Length % 2) != 0)
-                hexString += " ";
-            byte[] returnBytes = new byte[hexString.Length / 2];
-            for (int i = 0; i < returnBytes.Length; i++)
-                returnBytes[i] = Convert.ToByte(hexString.Substring(i * 2, 2), 16);
-            return returnBytes;
+            try
+            {
+                hexString = hexString.Replace(" ", "");
+                if ((hexString.Length % 2) != 0)
+                {
+                    hexString += " ";
+                }
+                byte[] returnBytes = new byte[hexString.Length / 2];
+                for (int i = 0; i < returnBytes.Length; i++)
+                {
+                    returnBytes[i] = Convert.ToByte(hexString.Substring(i * 2, 2), 16);
+                }
+                return returnBytes;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw e;
+            }
+           
         }
 
         /// <summary>
