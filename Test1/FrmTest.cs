@@ -12,13 +12,12 @@ using System.Windows.Forms;
 using System.Net.Sockets;
 using System.Net;
 using System.Threading;
-using Z21Start.subForm;
-using Z21Start.sysInfo;
-using Z21Start.tools;
+using Test1.sysInfo;
+using Test1.tools;
 
-namespace Z21Start
+namespace Test1
 {
-    public partial class Form2 : Form
+    public partial class FrmTest : Form
     {
         private string localIP = "";
         private int localPort = 0;
@@ -30,7 +29,7 @@ namespace Z21Start
             get { return strHex1; }
             set { strHex1 = value; }
         }
-        public Form2()
+        public FrmTest()
         {
             InitializeComponent();
             this.txtLocalIP.Text = GetInfo.GetAppConfig("localIP");
@@ -125,65 +124,7 @@ namespace Z21Start
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void btnRecv_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                remoteIP = this.txtRemoteIP.Text.Trim();
-                remotePort = int.Parse(this.txtRemotePort.Text);
-                if (!IsUdpcRecvStart) // 未监听的情况，开始监听
-                {
-                    //IPEndPoint localIpep = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 8848); // 本机IP和监听端口号
-                    IPEndPoint localIpep = new IPEndPoint(IPAddress.Parse(remoteIP), remotePort); // 本机IP和监听端口号
-                    udpcRecv = new UdpClient(localIpep);
-                    thrRecv = new Thread(ReceiveMessage);
-                    thrRecv.Start();
-                    IsUdpcRecvStart = true;
-                    ShowMessage(txtRecvMsg, "UDP监听器已成功启动");
-                }
-                else // 正在监听的情况，终止监听
-                {
-                    thrRecv.Abort(); // 必须先关闭这个线程，否则会异常
-                    udpcRecv.Close();
-                    IsUdpcRecvStart = false;
-                    ShowMessage(txtRecvMsg, "UDP监听器已成功关闭");
-                }
-            }
-            catch (Exception e1)
-            {
-                MessageBox.Show(e1.Message, "错误");
-            }
-        }
 
-        /// <summary>
-        /// 接收数据
-        /// </summary>
-        /// <param name="obj"></param>
-        private void ReceiveMessage(object obj)
-        {
-            try
-            {
-                IPEndPoint remoteIpep = new IPEndPoint(IPAddress.Any, 0);
-                while (true)
-                {
-                    try
-                    {
-                        byte[] bytRecv = udpcRecv.Receive(ref remoteIpep);
-                        string message = Encoding.Unicode.GetString(bytRecv, 0, bytRecv.Length);
-                        ShowMessage(txtRecvMsg, string.Format("{0}[{1}]", remoteIpep, message));
-                    }
-                    catch (Exception ex)
-                    {
-                        ShowMessage(txtRecvMsg, ex.Message);
-                        break;
-                    }
-                }
-            }
-            catch (Exception e1)
-            {
-                throw e1;
-            }
-        }
 
         // 向RichTextBox中添加文本
         delegate void ShowMessageDelegate(RichTextBox txtbox, string message);
@@ -227,10 +168,5 @@ namespace Z21Start
             Environment.Exit(0);
         }
 
-        private void btnSetXHD_Click(object sender, EventArgs e)
-        {
-            FrmSetXHD frmSetXhd=new FrmSetXHD();
-            frmSetXhd.Show();
-        }
     }
 }

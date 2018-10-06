@@ -29,8 +29,8 @@ namespace Z21Start.sysInfo
             get
             {
                 xhd xhd1=new xhd();
-                xhd1.Green.strBegin = "090040005300";
-                xhd1.Green.strEnd = "89b1";
+                xhd1.Green.strBegin = GetInfo.GetSendInfo("xhdSendGreen",1);
+                xhd1.Green.strEnd = GetInfo.GetSendInfo("xhdSendGreen",2);
                 return xhd1;
             }
         }
@@ -39,8 +39,8 @@ namespace Z21Start.sysInfo
             get
             {
                 xhd xhd1 = new xhd();
-                xhd1.Green.strBegin = "090040005300";
-                xhd1.Green.strEnd = "88b0";
+                xhd1.Green.strBegin = GetInfo.GetSendInfo("xhdSendRed",1);
+                xhd1.Green.strEnd = GetInfo.GetSendInfo("xhdSendRed",2);
                 return xhd1;
             }
         }

@@ -18,19 +18,20 @@ using Z21Start.tools;
 
 namespace Z21Start
 {
-    public partial class Form2 : Form
+    public partial class FrmMain : Form
     {
         private string localIP = "";
         private int localPort = 0;
         private string remoteIP = "";
         private int remotePort = 0;
         private  string strHex1 = "";
-        public  string StrHex
+        private Thread thrSend = null;
+        public string StrHex
         {
             get { return strHex1; }
             set { strHex1 = value; }
         }
-        public Form2()
+        public FrmMain()
         {
             InitializeComponent();
             this.txtLocalIP.Text = GetInfo.GetAppConfig("localIP");
@@ -82,6 +83,35 @@ namespace Z21Start
                 MessageBox.Show(e1.Message, "错误");
             }
         }
+        /// <summary>
+        /// 将数据发送到z21系统
+        /// </summary>
+        private void Send(string str)
+        {
+            //Thread thrSend = null;
+            try
+            {
+                //判断线程是否正常运行
+                if (thrSend.IsAlive == false)
+                {
+                    thrSend = new Thread(SendMessage);
+                }
+                remoteIP = this.txtRemoteIP.Text.Trim();
+                remotePort = int.Parse(this.txtRemotePort.Text);
+                IPEndPoint localIpep = new IPEndPoint(IPAddress.Parse(remoteIP), remotePort); // 本机IP，指定的端口号
+                udpcSend = new UdpClient(localIpep);
+                
+                thrSend.Start(str);
+            }
+            catch (Exception e1)
+            {
+                MessageBox.Show(e1.Message, "错误");
+            }
+            finally
+            {
+                thrSend.Abort();
+            }
+        }
 
         /// <summary>
         /// 发送信息
@@ -102,7 +132,9 @@ namespace Z21Start
                 IPEndPoint remoteIpep = new IPEndPoint(IPAddress.Parse(remoteIP), remotePort); // 发送到的IP地址和端口号
                 udpcSend.Send(sendbytes, sendbytes.Length, remoteIpep);
                 udpcSend.Close();
-                ResetTextBox(txtSendMsg);
+                //ResetTextBox(txtSendMsg);
+                ShowMessage(this.txtSendMsg, string.Format("{0} 发送成功!",message));
+
             }
             catch (Exception e1)
             {
@@ -129,15 +161,15 @@ namespace Z21Start
         {
             try
             {
-                remoteIP = this.txtRemoteIP.Text.Trim();
-                remotePort = int.Parse(this.txtRemotePort.Text);
+                localIP = this.txtLocalIP.Text.Trim();
+                localPort = int.Parse(this.txtLocalPort.Text);
                 if (!IsUdpcRecvStart) // 未监听的情况，开始监听
                 {
                     //IPEndPoint localIpep = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 8848); // 本机IP和监听端口号
-                    IPEndPoint localIpep = new IPEndPoint(IPAddress.Parse(remoteIP), remotePort); // 本机IP和监听端口号
+                    IPEndPoint localIpep = new IPEndPoint(IPAddress.Parse(localIP), localPort); // 本机IP和监听端口号
                     udpcRecv = new UdpClient(localIpep);
                     thrRecv = new Thread(ReceiveMessage);
-                    thrRecv.Start();
+                    thrRecv.Start("正在接收数据...");
                     IsUdpcRecvStart = true;
                     ShowMessage(txtRecvMsg, "UDP监听器已成功启动");
                 }
@@ -163,6 +195,7 @@ namespace Z21Start
         {
             try
             {
+                ShowMessage(txtRecvMsg, string.Format(obj.ToString()));
                 IPEndPoint remoteIpep = new IPEndPoint(IPAddress.Any, 0);
                 while (true)
                 {
@@ -171,6 +204,7 @@ namespace Z21Start
                         byte[] bytRecv = udpcRecv.Receive(ref remoteIpep);
                         string message = Encoding.Unicode.GetString(bytRecv, 0, bytRecv.Length);
                         ShowMessage(txtRecvMsg, string.Format("{0}[{1}]", remoteIpep, message));
+                        this.Send(message);
                     }
                     catch (Exception ex)
                     {
@@ -203,7 +237,10 @@ namespace Z21Start
 
         // 清空指定RichTextBox中的文本
         delegate void ResetTextBoxDelegate(RichTextBox txtbox);
-
+        /// <summary>
+        /// 清空指定RichTextBox中的文本
+        /// </summary>
+        /// <param name="txtbox"></param>
         private void ResetTextBox(RichTextBox txtbox)
         {
             if (txtbox.InvokeRequired)

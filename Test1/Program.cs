@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Z21Start
+namespace Test1
 {
     static class Program
     {
@@ -15,8 +15,8 @@ namespace Z21Start
         static void Main()
         {
             Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);   
-            Application.Run(new FrmMain());
+            Application.SetCompatibleTextRenderingDefault(false);
+            Application.Run(new FrmTest());
         }
     }
 }
