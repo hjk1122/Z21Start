@@ -76,7 +76,7 @@ namespace Z21Start.sysInfo
                 xhd xhd = new xhd();
                 //编号为现有数字减一
                 string idstring = tools.Tool.HexToDec(data.Substring(4, 2));
-                int Id = Int32.Parse(tools.Tool.HexToDec(data.Substring(4, 2))) - 1;
+                int Id = Int32.Parse(idstring) - 1;
                 czData.Id = tools.Tool.DecToHex(Id);
                 czData.flag = data.Substring(6, 2);
                 switch (czData.flag)
