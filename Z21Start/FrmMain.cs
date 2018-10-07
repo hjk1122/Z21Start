@@ -67,6 +67,7 @@ namespace Z21Start
                 thrSend = new Thread(SendMessage);
                 remoteIP = this.txtRemoteIP.Text.Trim();
                 remotePort = int.Parse(this.txtRemotePort.Text);
+                //设置本地ip,端口
                 IPEndPoint localIpep = new IPEndPoint(IPAddress.Parse(localIP), localPort+1); // 本机IP，指定的端口号
                 udpcSend = new UdpClient(localIpep);
                 //this.SendMessage(str);
@@ -94,15 +95,19 @@ namespace Z21Start
             {
                 //转换为16进制
                 string message = (string) obj;
-                //byte[] sendbytes = Encoding.UTF8.GetBytes(message);
                 //16进制字符串转换为8位字节数组
+                selectType selectType=new selectType();
+                //显示在窗体上的信息
+                string str = "";
+                message = selectType.GetData(message,out str);
+                
                 byte[] sendbytes = Tool.strToHexByte(message);
                 //IPEndPoint remoteIpep = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 8848); // 发送到的IP地址和端口号
                 IPEndPoint remoteIpep = new IPEndPoint(IPAddress.Parse(remoteIP), remotePort); // 发送到的IP地址和端口号
                 udpcSend.Send(sendbytes, sendbytes.Length, remoteIpep);
                 udpcSend.Close();
                 //ResetTextBox(txtSendMsg);
-                ShowMessage(this.txtSendMsg, string.Format("{0} 发送成功!",message));
+                ShowMessage(this.txtSendMsg, string.Format("{0} 发送成功!",str));
 
             }
             catch (Exception e1)

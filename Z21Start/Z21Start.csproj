@@ -88,6 +88,8 @@
       <DependentUpon>FrmSetXHD.cs</DependentUpon>
     </Compile>
     <Compile Include="sysInfo\GetInfo.cs" />
+    <Compile Include="sysInfo\dcData.cs" />
+    <Compile Include="sysInfo\selectType.cs" />
     <Compile Include="sysInfo\xhdData.cs" />
     <Compile Include="tools\Tool.cs" />
     <EmbeddedResource Include="Form1.resx">

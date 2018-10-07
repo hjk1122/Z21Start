@@ -21,7 +21,16 @@ namespace Z21Start.tools
             string str = Convert.ToString(dec, 16);
             return str;
         }
-
+        /// <summary>
+        /// 16进制字符串转换为10进制字符串
+        /// </summary>
+        /// <param name="hex"></param>
+        /// <returns></returns>
+        public static string HexToDec(string hex)
+        {
+            string str = Convert.ToInt32(hex,16).ToString();
+            return str;
+        }
         /// <summary>
         /// 将16进制字符串转换为对应字符
         /// </summary>
