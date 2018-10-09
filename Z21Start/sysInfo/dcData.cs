@@ -33,6 +33,16 @@ namespace Z21Start.sysInfo
                 return dc1;
             }
         }
+        public dc Ding1
+        {
+            get
+            {
+                dc dc1 = new dc();
+                dc1.ding.strBegin = GetInfo.GetSendInfo("dcSendDing1", 1);
+                dc1.ding.strEnd = GetInfo.GetSendInfo("dcSendDing1", 2);
+                return dc1;
+            }
+        }
         //道岔反位
         public dc Fan
         {
@@ -44,18 +54,36 @@ namespace Z21Start.sysInfo
                 return dc1;
             }
         }
-
-        public string DataInit(string data,out string str)
+        public dc Fan1
         {
-            StringBuilder result = new StringBuilder();
+            get
+            {
+                dc dc1 = new dc();
+                dc1.fan.strBegin = GetInfo.GetSendInfo("dcSendFan1", 1);
+                dc1.fan.strEnd = GetInfo.GetSendInfo("dcSendFan1", 2);
+                return dc1;
+            }
+        }
+        /// <summary>
+        /// 初始化数据
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="str"></param>
+        /// <returns></returns>
+        public sendData DataInit(string data)
+        {
+            StringBuilder data1 = new StringBuilder();
+            StringBuilder data2 = new StringBuilder();
             StringBuilder str1=new StringBuilder();
-            str = "";
+            sendData sendData=new sendData();
+            sendData.dataList = new List<string>();
+            //str = "";
             try
             {
                 if (data.Length != 8)
                 {
-                    result.Append("-1");
-                    return result.ToString();
+                    Exception e1=new Exception("数据长度不是8位");
+                    throw e1;
                 }
                 czData czData=new czData();
 
@@ -71,18 +99,32 @@ namespace Z21Start.sysInfo
                     case "00":
                         {
                             dc = this.Ding;
-                            result.AppendFormat("{0}{1}{2}", dc.ding.strBegin,
+                            data1.AppendFormat("{0}{1}{2}", dc.ding.strBegin,
+                                czData.Id, dc.ding.strEnd);
+                            dc = this.Ding1;
+                            data2.AppendFormat("{0}{1}{2}", dc.ding.strBegin,
                                 czData.Id, dc.ding.strEnd);
                             str1.AppendFormat("道岔[{0}] 状态[定位]", idstring);
+                            sendData.dataList.Add(data1.ToString());
+                            sendData.dataList.Add(data2.ToString());
+                            sendData.msg = str1.ToString();
+                            sendData.error = false;
                             break;
                         }
                     //反位
                     case "01":
                         {
                             dc = this.Fan;
-                            result.AppendFormat("{0}{1}{2}", dc.fan.strBegin,
+                            data1.AppendFormat("{0}{1}{2}", dc.fan.strBegin,
+                                czData.Id, dc.fan.strEnd);
+                            dc = this.Fan1;
+                            data2.AppendFormat("{0}{1}{2}", dc.fan.strBegin,
                                 czData.Id, dc.fan.strEnd);
                             str1.AppendFormat("道岔[{0}] 状态[反位]", idstring);
+                            sendData.dataList.Add(data1.ToString());
+                            sendData.dataList.Add(data2.ToString());
+                            sendData.msg = str1.ToString();
+                            sendData.error = false;
                             break;
                         }
                 }
@@ -91,12 +133,15 @@ namespace Z21Start.sysInfo
             }
             catch (Exception e1)
             {
+                sendData.dataList = null;
+                sendData.msg = e1.Message;
+                sendData.error = true;
                 MessageBox.Show(e1.Message, "错误");
             }
 
-            str = str1.ToString();
-            return result.ToString();
-            
+            //str = str1.ToString();
+            return sendData;
+
         }
     }
     

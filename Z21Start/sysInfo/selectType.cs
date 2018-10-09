@@ -6,12 +6,21 @@ using System.Threading.Tasks;
 
 namespace Z21Start.sysInfo
 {
+    /// <summary>
+    /// 要发送的数据
+    /// </summary>
+    public struct sendData
+    {
+        public List<string> dataList;
+        public string msg;
+        public bool error;
+    }
     public class selectType
     {
-        public string GetData(string data, out string str)
+        public sendData GetData(string data)
         {
-            string result = "";
-            str = "";
+            sendData sendData=new sendData();
+            //str = "";
             string czType=data.Substring(2, 2);
             int typeNum = Int32.Parse(tools.Tool.HexToDec(czType));
             switch (typeNum)
@@ -19,17 +28,17 @@ namespace Z21Start.sysInfo
                 case 208:
                 {
                     dcSendData dcSendData=new dcSendData();
-                    result = dcSendData.DataInit(data, out str);
+                    sendData = dcSendData.DataInit(data);
                     break;
                 }
                 case 203:
                 {
                     xhdSendData xhdSendData=new xhdSendData();
-                    result = xhdSendData.DataInit(data, out str);
+                    sendData = xhdSendData.DataInit(data);
                     break;
                 }
             }
-            return result;
+            return sendData;
         }
     }
 }

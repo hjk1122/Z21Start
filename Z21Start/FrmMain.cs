@@ -99,15 +99,25 @@ namespace Z21Start
                 selectType selectType=new selectType();
                 //显示在窗体上的信息
                 string str = "";
-                message = selectType.GetData(message,out str);
-                
-                byte[] sendbytes = Tool.strToHexByte(message);
-                //IPEndPoint remoteIpep = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 8848); // 发送到的IP地址和端口号
+                //message = selectType.GetData(message,out str);
+                sendData sendData=new sendData();
+                sendData = selectType.GetData(message);
+                if (sendData.error == true)
+                {
+                    Exception e=new Exception(sendData.msg);
+                    throw e;
+                }
                 IPEndPoint remoteIpep = new IPEndPoint(IPAddress.Parse(remoteIP), remotePort); // 发送到的IP地址和端口号
-                udpcSend.Send(sendbytes, sendbytes.Length, remoteIpep);
+                foreach (string s in sendData.dataList)
+                {
+                    byte[] sendbytes = Tool.strToHexByte(s);
+                    //IPEndPoint remoteIpep = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 8848); // 发送到的IP地址和端口号
+                    udpcSend.Send(sendbytes, sendbytes.Length, remoteIpep);
+                    Thread.Sleep(100);
+                }
                 udpcSend.Close();
                 //ResetTextBox(txtSendMsg);
-                ShowMessage(this.txtSendMsg, string.Format("{0} 发送成功!",str));
+                ShowMessage(this.txtSendMsg, string.Format("{0} 发送成功!",sendData.msg));
 
             }
             catch (Exception e1)

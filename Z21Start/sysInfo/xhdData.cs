@@ -48,6 +48,17 @@ namespace Z21Start.sysInfo
                 return xhd1;
             }
         }
+        public xhd Green1
+        {
+            get
+            {
+                xhd xhd1 = new xhd();
+                xhd1.Green.strBegin = GetInfo.GetSendInfo("xhdSendGreen1", 1);
+                xhd1.Green.strEnd = GetInfo.GetSendInfo("xhdSendGreen1", 2);
+                return xhd1;
+            }
+        }
+
         public xhd Red
         {
             get
@@ -58,18 +69,31 @@ namespace Z21Start.sysInfo
                 return xhd1;
             }
         }
-
-        public string DataInit(string data,out string str)
+        public xhd Red1
         {
-            StringBuilder result = new StringBuilder();
-            StringBuilder str1=new StringBuilder();
-            str = "";
+            get
+            {
+                xhd xhd1 = new xhd();
+                xhd1.Red.strBegin = GetInfo.GetSendInfo("xhdSendRed1", 1);
+                xhd1.Red.strEnd = GetInfo.GetSendInfo("xhdSendRed1", 2);
+                return xhd1;
+            }
+        }
+
+        public sendData DataInit(string data)
+        {
+            StringBuilder data1 = new StringBuilder();
+            StringBuilder data2 = new StringBuilder();
+            StringBuilder str1 = new StringBuilder();
+            sendData sendData = new sendData();
+            sendData.dataList=new List<string>();
+            //str = "";
             try
             {
                 if (data.Length != 8)
                 {
-                    result.Append("-1");
-                    return result.ToString();
+                    Exception e1 = new Exception("数据长度不是8位");
+                    throw e1;
                 }
                 czData czData=new czData();
                 
@@ -84,19 +108,34 @@ namespace Z21Start.sysInfo
                     //绿色
                     case "01":
                         {
+
                             xhd = this.Green;
-                            result.AppendFormat("{0}{1}{2}", xhd.Green.strBegin,
+                            data1.AppendFormat("{0}{1}{2}", xhd.Green.strBegin,
+                                czData.Id, xhd.Green.strEnd);
+                            xhd = this.Green1;
+                            data2.AppendFormat("{0}{1}{2}", xhd.Green.strBegin,
                                 czData.Id, xhd.Green.strEnd);
                             str1.AppendFormat("信号灯[{0}] 状态[绿]", idstring);
+                            sendData.dataList.Add(data1.ToString());
+                            sendData.dataList.Add(data2.ToString());
+                            sendData.msg = str1.ToString();
+                            sendData.error = false;
                             break;
                         }
                     //红色
                     case "00":
                         {
                             xhd = this.Red;
-                            result.AppendFormat("{0}{1}{2}", xhd.Red.strBegin,
+                            data1.AppendFormat("{0}{1}{2}", xhd.Red.strBegin,
+                                czData.Id, xhd.Red.strEnd);
+                            xhd = this.Red1;
+                            data2.AppendFormat("{0}{1}{2}", xhd.Red.strBegin,
                                 czData.Id, xhd.Red.strEnd);
                             str1.AppendFormat("信号灯[{0}] 状态[红]", idstring);
+                            sendData.dataList.Add(data1.ToString());
+                            sendData.dataList.Add(data2.ToString());
+                            sendData.msg = str1.ToString();
+                            sendData.error = false;
                             break;
                         }
                 }
@@ -105,11 +144,14 @@ namespace Z21Start.sysInfo
             }
             catch (Exception e1)
             {
+                sendData.dataList = null;
+                sendData.msg = e1.Message;
+                sendData.error = true;
                 MessageBox.Show(e1.Message, "错误");
             }
 
-            str = str1.ToString();
-            return result.ToString();
+            //str = str1.ToString();
+            return sendData;
             
         }
     }
