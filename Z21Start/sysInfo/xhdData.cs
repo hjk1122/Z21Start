@@ -22,16 +22,7 @@ namespace Z21Start.sysInfo
         public subStr Red;
 
     }
-    /// <summary>
-    /// 操作数据
-    /// </summary>
-    public struct czData
-    {
-        //操作对象编号
-        public string Id;
-        //操作状态
-        public string flag;
-    }
+    
     /// <summary>
     /// 信号灯发送数据
     /// </summary>
